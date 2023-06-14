@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react'
 import Errorbox from './Errorbox'
 import DetailsModal from './DetailsModal'
 import DeleteModal from './DeleteModal'
+import EditModal from './EditModal'
 export default function Comments() {
   const [allComments, setAllComments] = useState([])
   const [isSowDetailsModal, setIsSowDetailsModal] = useState(false)
   const [isSowDeleteModal, setIsSowDeleteModal] = useState(false)
-  const [mainCommentID, setMainCommentID] = useState('')
+  const [isSowEditModal, setIsSowEditModal] = useState(false)
+  const [mainCommentID, setMainCommentID] = useState(null)
+  const [mainCommentBody, setMainCommentBody] = useState('')
   const [mainCommentInfo, setMainCommentInfo] = useState({})
-
-
+  
   const getAllComments = () => {
     fetch(`http://localhost:8000/api/comments`)
       .then(res => res.json())
@@ -17,6 +19,30 @@ export default function Comments() {
         setAllComments(Comment)
       })
   }
+  const onClose = ()=>{
+    setIsSowEditModal(false)
+  }
+
+  const onSubmit = (e)=>{
+    e.preventDefault()
+    setIsSowEditModal(false)
+    const commentNewInfo = {
+      body: mainCommentBody
+    }
+    fetch(`http://localhost:8000/api/comments/${mainCommentID}` , {
+      method:'PUT',
+      headers: {
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify(commentNewInfo)
+    })
+    .then(res=> res.json())
+    .then(data =>{
+      getAllComments()
+    })
+  }
+
+
 
   useEffect(() => {
     getAllComments()
@@ -74,7 +100,11 @@ export default function Comments() {
                           setMainCommentID(comment.id)
                           setIsSowDeleteModal(true)
                         }} className='bg-violet-900 rounded-md px-4 py-1'>حذف</button>
-                        <button className='bg-violet-900 rounded-md px-4 py-1'>ویرایش</button>
+                        <button onClick={()=>{
+                          setMainCommentID(comment.id)
+                          setIsSowEditModal(true)
+                          setMainCommentBody(comment.body)
+                        }} className='bg-violet-900 rounded-md px-4 py-1'>ویرایش</button>
                         <button className='bg-violet-900 rounded-md px-4 py-1'>پاسخ</button>
                         <button className='bg-violet-900 rounded-md px-4 py-1'>تایید</button>
                       </td>
@@ -94,11 +124,17 @@ export default function Comments() {
           <p>{mainCommentInfo.body}</p>
         </div>
       </DetailsModal>
-      {
 
-        <DeleteModal isSowDeleteModal={isSowDeleteModal} submitAction={submitAction} cancelAction={cancelAction}></DeleteModal>
 
-      }
+      <DeleteModal isSowDeleteModal={isSowDeleteModal} submitAction={submitAction} cancelAction={cancelAction}></DeleteModal>
+
+      <EditModal onSubmit={onSubmit} isSowEditModal={isSowEditModal} onClose={onClose}>
+      <textarea onChange={(e)=>setMainCommentBody(e.target.value)} value={mainCommentBody} cols="30" rows="10">
+        
+      </textarea>
+      </EditModal>
+      
+
     </div>
   )
 }
