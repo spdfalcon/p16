@@ -3,18 +3,20 @@ import Errorbox from './Errorbox'
 import DetailsModal from './DetailsModal'
 import DeleteModal from './DeleteModal'
 import EditModal from './EditModal'
-import {BsCheckCircle} from 'react-icons/bs'
+import { BsCheckCircle } from 'react-icons/bs'
 export default function Comments() {
   const [allComments, setAllComments] = useState([])
   const [isSowDetailsModal, setIsSowDetailsModal] = useState(false)
   const [isSowDeleteModal, setIsSowDeleteModal] = useState(false)
   const [isSowEditModal, setIsSowEditModal] = useState(false)
   const [isShowAcceptModal, setIsShowAcceptModal] = useState(false)
+  const [isShowRejectModal, setIsShowRejectModal] = useState(false)
   const [mainCommentID, setMainCommentID] = useState(null)
   const [mainCommentIDAccept, setMainCommentIDAccept] = useState(null)
+  const [mainCommentIDReject, setMainCommentIDReject] = useState(null)
   const [mainCommentBody, setMainCommentBody] = useState('')
   const [mainCommentInfo, setMainCommentInfo] = useState({})
-  
+
   const getAllComments = () => {
     fetch(`http://localhost:8000/api/comments`)
       .then(res => res.json())
@@ -22,27 +24,27 @@ export default function Comments() {
         setAllComments(Comment)
       })
   }
-  const onClose = ()=>{
+  const onClose = () => {
     setIsSowEditModal(false)
   }
 
-  const onSubmit = (e)=>{
+  const onSubmit = (e) => {
     e.preventDefault()
     setIsSowEditModal(false)
     const commentNewInfo = {
       body: mainCommentBody
     }
-    fetch(`http://localhost:8000/api/comments/${mainCommentID}` , {
-      method:'PUT',
+    fetch(`http://localhost:8000/api/comments/${mainCommentID}`, {
+      method: 'PUT',
       headers: {
-        'Content-Type':'application/json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(commentNewInfo)
     })
-    .then(res=> res.json())
-    .then(data =>{
-      getAllComments()
-    })
+      .then(res => res.json())
+      .then(data => {
+        getAllComments()
+      })
   }
 
 
@@ -52,7 +54,7 @@ export default function Comments() {
   }, [])
 
   const submitAction = () => {
-    if(mainCommentID){
+    if (mainCommentID) {
       fetch(`http://localhost:8000/api/comments/${mainCommentID}`, {
         method: 'DELETE'
       })
@@ -62,24 +64,38 @@ export default function Comments() {
           setIsSowDeleteModal(false)
           setMainCommentID(null)
         })
-      }
-      
-      if(mainCommentIDAccept){
-        fetch(`http://localhost:8000/api/comments/accept/${mainCommentIDAccept}`,{
-          method: 'POST'
-        })
-        .then(res=>res.json())
-        .then(data =>{
-          console.log(data);
-          setIsShowAcceptModal(false)
-          getAllComments()
-        })
     }
 
+    if (mainCommentIDAccept) {
+      fetch(`http://localhost:8000/api/comments/accept/${mainCommentIDAccept}`, {
+        method: 'POST'
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          getAllComments()
+          setIsShowAcceptModal(false)
+          setMainCommentIDAccept(null)
+        })
     }
-    const cancelAction = () => {
-      setIsSowDeleteModal(false)
-      setIsShowAcceptModal(false)
+    if (isShowRejectModal) {
+      fetch(`http://localhost:8000/api/comments/reject/${mainCommentIDReject}`, {
+        method: 'POST'
+      })
+        .then(res => res.json())
+        .then(data => {
+          setIsShowRejectModal(false)
+          setMainCommentIDReject(null)
+          getAllComments()
+        })
+
+    }
+
+  }
+  const cancelAction = () => {
+    setIsSowDeleteModal(false)
+    setIsShowAcceptModal(false)
+    setIsShowRejectModal(false)
 
   }
 
@@ -120,17 +136,22 @@ export default function Comments() {
                           setMainCommentID(comment.id)
                           setIsSowDeleteModal(true)
                         }} className='bg-violet-900 rounded-md px-4 py-1'>حذف</button>
-                        <button onClick={()=>{
+                        <button onClick={() => {
                           setMainCommentID(comment.id)
                           setIsSowEditModal(true)
                           setMainCommentBody(comment.body)
                         }} className='bg-violet-900 rounded-md px-4 py-1'>ویرایش</button>
                         <button className='bg-violet-900 rounded-md px-4 py-1'>پاسخ</button>
-                        {!comment.isAccept && (
-                          <button onClick={()=>{
+                        {!comment.isAccept ? (
+                          <button onClick={() => {
                             setIsShowAcceptModal(true)
                             setMainCommentIDAccept(comment.id)
                           }} className='bg-violet-900 rounded-md px-4 py-1'>تایید</button>
+                        ) : (
+                          <button onClick={() => {
+                            setIsShowRejectModal(true)
+                            setMainCommentIDReject(comment.id)
+                          }} className='bg-violet-900 rounded-md px-4 py-1'>رد</button>
                         )}
                         {
                           comment.isAccept && (
@@ -158,17 +179,17 @@ export default function Comments() {
       </DetailsModal>
 
 
-      <DeleteModal isShowAcceptModal={isShowAcceptModal} isSowDeleteModal={isSowDeleteModal} submitAction={submitAction} cancelAction={cancelAction} title={isSowDeleteModal ? `آیا از   حذف کامنت مطمعن هستید؟` : isShowAcceptModal ? `آیا کامنت مورد تایید است؟` : ''} ></DeleteModal>
+      <DeleteModal isShowRejectModal={isShowRejectModal} isShowAcceptModal={isShowAcceptModal} isSowDeleteModal={isSowDeleteModal} submitAction={submitAction} cancelAction={cancelAction} title={isSowDeleteModal ? `آیا از   حذف کامنت مطمعن هستید؟` : isShowAcceptModal ? `آیا کامنت مورد تایید است؟` : isShowRejectModal ? 'این کامن را رد میکنید؟' : ''} ></DeleteModal>
 
 
-      
+
 
       <EditModal onSubmit={onSubmit} isSowEditModal={isSowEditModal} onClose={onClose}>
-      <textarea onChange={(e)=>setMainCommentBody(e.target.value)} value={mainCommentBody} cols="30" rows="10">
-        
-      </textarea>
+        <textarea onChange={(e) => setMainCommentBody(e.target.value)} value={mainCommentBody} cols="30" rows="10">
+
+        </textarea>
       </EditModal>
-      
+
 
     </div>
   )
