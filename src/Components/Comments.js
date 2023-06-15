@@ -96,6 +96,7 @@ export default function Comments() {
     setIsSowDeleteModal(false)
     setIsShowAcceptModal(false)
     setIsShowRejectModal(false)
+    setMainCommentID(null)
 
   }
 
