@@ -129,7 +129,7 @@ export default function ProductsTable({allProductsData , getAllProducts}) {
       }
 
       {/* {isSowDeleteModal && <DeleteModal submitAction={deleteModalSubmitAction} cancelAction={deleteModalCancelAction}></DeleteModal>} */}
-      <DeleteModal isSowDeleteModal={isSowDeleteModal} submitAction={deleteModalSubmitAction} cancelAction={deleteModalCancelAction}></DeleteModal>
+      <DeleteModal isSowDeleteModal={isSowDeleteModal} submitAction={deleteModalSubmitAction} cancelAction={deleteModalCancelAction} title={'آیا از حذف مطمعن هستید؟'}></DeleteModal>
 
       <DetailsModal isSowDetailsModal={isSowDetailsModal}
         DetailsModalCancel={DetailsModalCancel}>
