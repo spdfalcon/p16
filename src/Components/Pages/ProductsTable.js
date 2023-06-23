@@ -4,7 +4,7 @@ import DetailsModal from '../DetailsModal'
 import EditModal from '../EditModal'
 import Errorbox from '../Errorbox'
 import { AiOutlineDollarCircle } from 'react-icons/ai'
-export default function ProductsTable({allProductsData , getAllProducts}) {
+export default function ProductsTable({ allProductsData, getAllProducts }) {
   const [isSowDeleteModal, setIsSowDeleteModal] = useState(false)
   const [isSowDetailsModal, setIsSowDetailsModal] = useState(false)
   const [isSowEditModal, setIsSowEditModal] = useState(false)
@@ -19,7 +19,7 @@ export default function ProductsTable({allProductsData , getAllProducts}) {
   const [productNewColors, setProductNewColors] = useState('')
 
 
-  
+
 
   const deleteModalCancelAction = () => {
     setIsSowDeleteModal(false)
@@ -53,18 +53,18 @@ export default function ProductsTable({allProductsData , getAllProducts}) {
       colors: productNewColors,
     }
 
-    fetch(`http://localhost:8000/api/products/${productID}` , {
-      method:'PUT',
-      headers:{
-        'Content-Type':'application/json'
+    fetch(`http://localhost:8000/api/products/${productID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify([productsNewInfo])
-    }).then (res=>res.json())
-    .then(result => {
-      console.log(result);
-      getAllProducts()
-      setIsSowEditModal(false)
-    })
+    }).then(res => res.json())
+      .then(result => {
+        console.log(result);
+        getAllProducts()
+        setIsSowEditModal(false)
+      })
   }
 
   return (
@@ -157,14 +157,14 @@ export default function ProductsTable({allProductsData , getAllProducts}) {
           <div className='flex bg-white items-center gap-2 p-2 rounded-md'>
             <div><AiOutlineDollarCircle></AiOutlineDollarCircle></div>
             <input className='focus:outline-none' placeholder='عنوان جدید را وارد کنید' type="text" value={productNewTitle}
-            onChange={(event)=>setProductNewTitle(event.target.value)}
+              onChange={(event) => setProductNewTitle(event.target.value)}
             />
           </div>
           <div className='flex bg-white items-center gap-2 p-2 rounded-md'>
             <div><AiOutlineDollarCircle></AiOutlineDollarCircle></div>
             <input className='focus:outline-none' placeholder='قیمت جدید را وارد کنید' type="text" name="" id=""
               value={productNewPrice}
-              onChange={(event)=>setProductNewPrice(event.target.value)}
+              onChange={(event) => setProductNewPrice(event.target.value)}
             />
           </div>
           <div className='flex bg-white items-center gap-2 p-2 rounded-md'>
@@ -177,7 +177,7 @@ export default function ProductsTable({allProductsData , getAllProducts}) {
             <div><AiOutlineDollarCircle></AiOutlineDollarCircle></div>
             <input className='focus:outline-none' placeholder='آدرس کاور جدید را وارد کنید' type="text" name="" id=""
               value={productNewImg}
-              onChange={(event)=>setProductNewImg(event.target.value)}
+              onChange={(event) => setProductNewImg(event.target.value)}
 
             />
           </div>
@@ -185,7 +185,7 @@ export default function ProductsTable({allProductsData , getAllProducts}) {
             <div><AiOutlineDollarCircle></AiOutlineDollarCircle></div>
             <input className='focus:outline-none' placeholder='محبوبیت کاور جدید را وارد کنید' type="text" name="" id=""
               value={productNewPopularity}
-              onChange={(event)=>setProductNewPopularity(event.target.value)}
+              onChange={(event) => setProductNewPopularity(event.target.value)}
 
             />
           </div>
@@ -193,7 +193,7 @@ export default function ProductsTable({allProductsData , getAllProducts}) {
             <div><AiOutlineDollarCircle></AiOutlineDollarCircle></div>
             <input className='focus:outline-none' placeholder='میزان فروش جدید را وارد کنید' type="text" name="" id=""
               value={productNewSale}
-              onChange={(event)=>setProductNewSale(event.target.value)}
+              onChange={(event) => setProductNewSale(event.target.value)}
 
             />
           </div>
@@ -201,7 +201,7 @@ export default function ProductsTable({allProductsData , getAllProducts}) {
             <div><AiOutlineDollarCircle></AiOutlineDollarCircle></div>
             <input className='focus:outline-none' placeholder='تعداد رنگبندی جدید را وارد کنید' type="text" name="" id=""
               value={productNewColors}
-              onChange={(event)=>setProductNewColors(event.target.value)}
+              onChange={(event) => setProductNewColors(event.target.value)}
 
             />
           </div>

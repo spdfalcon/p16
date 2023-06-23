@@ -7,7 +7,7 @@ export default function Header() {
             <div className='p-5 flex justify-between shadow-xl'>
                 <div className='r flex gap-3 items-center'>
                     <div className='w-10 h-10 overflow-hidden rounded-full'>
-                        <img src="/images/1.jpg" alt="" />
+                        <img src="/img/1.jpg" alt="" />
                     </div>
                     <div>
                         <h3>محمدرضا گودرزی</h3>

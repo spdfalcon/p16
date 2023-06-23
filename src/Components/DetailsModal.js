@@ -15,7 +15,7 @@ export default function DetailsModal({ isSowDetailsModal, DetailsModalCancel , c
     });
     return ReactDOM.createPortal(
         <div className={`w-full h-screen top-0 fixed bg-gray-900/60 flex justify-center items-center font-medium font-lalezar duration-500 ${isSowDetailsModal ? `opacity-100 visible ` : `opacity-0 invisible`} `}>
-            <div className='bg-gray-200 px-12 w-1/3 h-1/4 relative py-16 rounded-md flex flex-col gap-5'>
+            <div className='bg-gray-200 px-12 w-2/5 h-1/4 relative py-16 rounded-md flex flex-col gap-5'>
 
                     {children}
 
